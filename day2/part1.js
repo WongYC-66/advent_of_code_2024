@@ -65,7 +65,7 @@ const isValidReport = nums => {
 
 const main = async () => {
     // let rawFile = await readFile("sample.txt")
-    let rawFile = await readFile("input_part1.txt")
+    let rawFile = await readFile("input.txt")
     console.log(rawFile)
     let reportArr = rawFile
         .replaceAll("\r", "")
