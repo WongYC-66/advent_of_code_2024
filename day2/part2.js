@@ -14,7 +14,6 @@ const fs = require('node:fs/promises');
 const readFile = async (fileName) => {
     try {
         const data = await fs.readFile(`./${fileName}`, { encoding: 'utf8' });
-        // console.log(data);
         return data
     } catch (err) {
         console.log(err);
@@ -31,61 +30,51 @@ const isWithinRange = (n1, n2) => {
 }
 
 const isValidReport = nums => {
-    let isIncreasingSeq = isIncreasing(nums[0], nums[1])
+    let shouldIncrease = isIncreasing(nums[0], nums[1])
 
     for (let i = 0; i < nums.length - 1; i++) {
         let left = nums[i]
         let right = nums[i + 1]
 
         if (!isWithinRange(left, right)) {
-            // console.log("invalid, not within range")
-            return false
+            return false         // "invalid, not within range"
         }
 
-        if (isIncreasingSeq) {
-            // must be increasing, n1 < n2
+        if (shouldIncrease) {
+            // must be increasing then, n1 < n2
             if (!isIncreasing(left, right)) {
-                // console.log("invalid, should be increasing")
-                return false
+                return false    // "invalid, should be increasing"
             }
-
         } else {
             //  decreasing sequence, n1 > n2
             if (!isDecreasing(left, right)) {
-                // console.log("invalid, should be decreasing")
-                return false
+                return false    // "invalid, should be decreasing"
             }
         }
     }
-    // console.log(nums, "is valid report")
     return true
 }
 
 const isTolerableReport = nums => {
     // brute-force
     let possibleReport = []
-    for(let i = 0 ; i < nums.length ;i++){
-        // remove each index
+    for (let i = 0; i < nums.length; i++) {
+        // create remove each index and create a new copy
         let seq = nums.slice()
         seq.splice(i, 1)
         possibleReport.push(seq)
     }
-    let res = possibleReport.some(isValidReport)
-    console.log(nums, res)
-    return res
+    return possibleReport.some(isValidReport)
 }
 
 
 const main = async () => {
     // let rawFile = await readFile("sample.txt")
     let rawFile = await readFile("input.txt")
-    console.log(rawFile)
     let reportArr = rawFile
         .replaceAll("\r", "")
         .split("\n")
-        .map(report => report.split(' ').map(Number))
-    // console.log(reportArr)
-
+        .map(report => report.split(' ').map(Number))   // [ [1,3,4,5,6] , [2,2,3,4,5], ...]
 
     let res = reportArr.filter(isTolerableReport).length
     console.log(res)
