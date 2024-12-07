@@ -91,7 +91,7 @@ const main = async () => {
             // is a '.' , try to replace with '#' and see if can solve
             grid[r][c] = '#'
             if (!canSolve(startR, startC, 0, grid)) {
-                console.log(r, c, "cant solve")
+                // console.log(r, c, "cant solve")
                 res += 1
             }
             // undo, backtrack
