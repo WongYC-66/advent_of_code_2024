@@ -1,15 +1,5 @@
 // https://adventofcode.com/2024/day/6
-const fs = require('node:fs/promises');
-
-const readFile = async (fileName) => {
-    try {
-        const data = await fs.readFile(`./${fileName}`, { encoding: 'utf8' });
-        // console.log(data);
-        return data
-    } catch (err) {
-        console.log(err);
-    }
-}
+const { readFile } = require("../lib.js")
 
 const canSolve = (r, c, dir, grid) => {
     let M = grid.length
@@ -101,6 +91,8 @@ const main = async () => {
     console.log(startR, startC)
     console.log(res)
     return res
+    // expected sample.txt = 6
+    // expected input.txt = 1928
 
 }
 
