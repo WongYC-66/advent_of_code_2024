@@ -1,25 +1,6 @@
 // Problem statement : https://adventofcode.com/2024/day/2#part2
 
-/*
-7 6 4 2 1: Safe without removing any level.
-1 2 7 8 9: Unsafe regardless of which level is removed.
-9 7 6 2 1: Unsafe regardless of which level is removed.
-1 3 2 4 5: Safe by removing the second level, 3.
-8 6 4 4 1: Safe by removing the third level, 4.
-1 3 6 7 9: Safe without removing any level.
-*/
-
-const fs = require('node:fs/promises');
-
-const readFile = async (fileName) => {
-    try {
-        const data = await fs.readFile(`./${fileName}`, { encoding: 'utf8' });
-        return data
-    } catch (err) {
-        console.log(err);
-    }
-}
-
+const { readFile } = require("../lib.js")
 
 const isIncreasing = (n1, n2) => n1 < n2
 const isDecreasing = (n1, n2) => n1 > n2
@@ -71,14 +52,18 @@ const isTolerableReport = nums => {
 const main = async () => {
     // let rawFile = await readFile("sample.txt")
     let rawFile = await readFile("input.txt")
-    let reportArr = rawFile
+    rawFile = rawFile
         .replaceAll("\r", "")
         .split("\n")
-        .map(report => report.split(' ').map(Number))   // [ [1,3,4,5,6] , [2,2,3,4,5], ...]
+    console.log(rawFile)
+    
+    let reportArr = rawFile.map(str => str.split(' ').map(Number))
 
     let res = reportArr.filter(isTolerableReport).length
     console.log(res)
     return res
+    // expected sample.txt = 4
+    // expected input.txt = 544
 }
 
 main()
