@@ -1,18 +1,8 @@
 // https://adventofcode.com/2024/day/4
-const fs = require('node:fs/promises');
+const { readFile } = require("../lib.js")
 
-const readFile = async (fileName) => {
-    try {
-        const data = await fs.readFile(`./${fileName}`, { encoding: 'utf8' });
-        // console.log(data);
-        return data
-    } catch (err) {
-        console.log(err);
-    }
-}
-
-
-const search = (r, c, grid) => {
+const searchXMAS = (r, c, grid) => {
+    // return Boolean
     let M = grid.length
     let N = grid[0].length
     let count = {}
@@ -31,10 +21,7 @@ const search = (r, c, grid) => {
         let char = grid[nR][nC]
         count[char] = (count[char] || 0) + 1
     }
-    // console.log(r,c, count)
-    // if (count['M'] == 2 && count['S'] == 2) {
-    //     console.log(count)
-    // }
+
     const isDiagonalDiff = grid[r - 1][c - 1] != grid[r + 1][c + 1]
     return (count['M'] == 2 && count['S'] == 2) && isDiagonalDiff
 }
@@ -43,11 +30,11 @@ const search = (r, c, grid) => {
 const main = async () => {
     // let rawFile = await readFile("sample.txt")
     let rawFile = await readFile("input2.txt")
-    // console.log(rawFile)
     let grid = rawFile
         .replaceAll("\r", "")
         .split("\n")
-    console.log(grid)
+    // console.log(rawFile)
+    // console.log(grid)
 
     let M = grid.length
     let N = grid[0].length
@@ -57,15 +44,14 @@ const main = async () => {
             let char = grid[r][c]
             if (char != 'A') continue
 
-            // console.log(char)
-            if (search(r, c, grid)) {
-                res += 1
-                console.log(r, c, res)
-            }
+            res += searchXMAS(r, c, grid)
         }
     }
+
     console.log(res)
     return res
+    // expected sample.txt = 9
+    // expected input.txt = 1998
 }
 
 
