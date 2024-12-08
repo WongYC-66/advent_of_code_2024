@@ -1,25 +1,11 @@
 // https://adventofcode.com/2024/day/5
-const fs = require('node:fs/promises');
-
-const readFile = async (fileName) => {
-    try {
-        const data = await fs.readFile(`./${fileName}`, { encoding: 'utf8' });
-        // console.log(data);
-        return data
-    } catch (err) {
-        console.log(err);
-    }
-}
+const { readFile } = require("../lib.js")
 
 const buildMap = (pairs) => {
     let beforeMap = {}
     for (let [n1, n2] of pairs) {
         if (!beforeMap[n1]) beforeMap[n1] = new Set()
         beforeMap[n1].add(n2)
-    }
-    // console.log(beforeMap)
-    for (let k in beforeMap) {
-        // console.log(k, beforeMap[k].size)
     }
     return beforeMap
 }
@@ -74,14 +60,11 @@ const getMiddle = (arr) => {
     return arr[Math.floor(arr.length / 2)]
 }
 
-const main = async () => {
-    // let rawFile = await readFile("sample.txt")
-    let rawFile = await readFile("input.txt")
-    rawFile = rawFile
-        .replaceAll("\r", "")
-        .split("\n")
-    console.log(rawFile)
+const sum = arr => {
+    return arr.reduce((s, x) => s + x, 0)
+}
 
+const extracData = rawFile => {
     let pairs = []  // [[1,2], [2,4]]
     let updates = []
 
@@ -98,17 +81,28 @@ const main = async () => {
         }
     }
 
+    return [pairs, updates]
+}
+
+const main = async () => {
+    // let rawFile = await readFile("sample.txt")
+    let rawFile = await readFile("input.txt")
+    rawFile = rawFile
+        .replaceAll("\r", "")
+        .split("\n")
+    console.log(rawFile)
+
+    let [pairs, updates] = extracData(rawFile)
+
     let beforeMap = buildMap(pairs)
     let invalidSequences = findInvalidSeq(updates, beforeMap)
     let sortedValidSeq = resolve(invalidSequences, pairs)
-    let sumOfMiddle = sortedValidSeq
-        .map(getMiddle)
-        .reduce((s, x) => s + x, 0)
 
-    console.log(invalidSequences)
-    console.log(sortedValidSeq)
+    let sumOfMiddle = sum(sortedValidSeq.map(getMiddle))
     console.log(sumOfMiddle)
     return sumOfMiddle
+    // expected sample.txt = 123
+    // expected input.txt = 5466
 }
 
 
