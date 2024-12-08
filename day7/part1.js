@@ -1,15 +1,5 @@
 // https://adventofcode.com/2024/day/7
-const fs = require('node:fs/promises');
-
-const readFile = async (fileName) => {
-    try {
-        const data = await fs.readFile(`./${fileName}`, { encoding: 'utf8' });
-        // console.log(data);
-        return data
-    } catch (err) {
-        console.log(err);
-    }
-}
+const { readFile } = require("../lib.js")
 
 const validating = ([target, nums]) => {
 
@@ -17,9 +7,9 @@ const validating = ([target, nums]) => {
     let res = false
 
     const dfs = (i, curr) => {
-        if(i == nums.length){
-            if(curr == target) res = true
-            return 
+        if (i == nums.length) {
+            if (curr == target) res = true
+            return
         }
 
         // do + 
@@ -33,6 +23,19 @@ const validating = ([target, nums]) => {
     return res
 }
 
+const extractData = (rawFile) => {
+    let eqs = []    // [ [190, [10,19]], ... ]
+    rawFile.forEach(str => {
+        let [total, remains] = str.split(":")
+        let arr = remains.trim().split(" ").map(Number)
+        eqs.push([Number(total), arr])
+    })
+    return eqs
+}
+
+const sum = arr => {
+    return arr.reduce((s, x) => s + x, 0)
+}
 
 const main = async () => {
     // let rawFile = await readFile("sample.txt")
@@ -41,24 +44,18 @@ const main = async () => {
         .replaceAll("\r", "")
         .split("\n")
 
-    let eqs = []    // [ [190, [10,19]], ... ]
-    rawFile.forEach(str => {
-        let [total, remains] = str.split(":")
-        let arr = remains.trim().split(" ").map(Number)
-        eqs.push([Number(total), arr])
-    })
-
+    let eqs = extractData(rawFile)    // [ [190, [10,19]], ... ]
     let validEqs = eqs.filter(validating)
 
-    console.log(rawFile)
-    console.log(eqs)
-    console.log(validEqs)
+    // console.log(rawFile)
+    // console.log(eqs)
+    // console.log(validEqs)
 
-    let res = validEqs.reduce((s, x) => s + x[0], 0)
+    let res = sum(validEqs.map(x => x[0]))
     console.log(res)
-
     return res
-
+    // expected sample.txt = 3749
+    // expected input.txt = 1298103531759
 }
 
 
