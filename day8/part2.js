@@ -1,16 +1,6 @@
 // https://adventofcode.com/2024/day/8
-const fs = require('node:fs/promises');
 
-const readFile = async (fileName) => {
-    try {
-        const data = await fs.readFile(`./${fileName}`, { encoding: 'utf8' });
-        // console.log(data);
-        return data
-    } catch (err) {
-        console.log(err);
-    }
-}
-
+const { readFile } = require("../lib.js")
 
 const drawAndReturnCount = (arrOfStr) => {
     let grid = arrOfStr.map(str => str.split(''))
@@ -25,7 +15,27 @@ const drawAndReturnCount = (arrOfStr) => {
         return grid[r][c] == '.'
     }
 
-    const coordsToStr = (r, c) => `${r}-${c}`
+    const coordsToStr = (r, c) => {
+        return `${r}-${c}`
+    }
+
+    const addAntiNode = (r, c, dr, dc) => {
+        for (let i = 0; i < Infinity; i++) {
+            let anti_r = r + dr * i
+            let anti_c = c + dc * i
+            if (isValidCoords(anti_r, anti_c)) {
+                uniqueLocAntenna.add(coordsToStr(anti_r, anti_c))
+                // if (canDraw(r, c)) grid[r][c] = '#'
+            } else {
+                break
+            }
+        }
+    }
+
+    const printGrid = () => {
+        let tmpGrid = grid.map(arr => arr.join(''))
+        console.log(tmpGrid)
+    }
 
     let antennaCoords = {}  // { 'A' : [[0,1], ...] }
 
@@ -35,6 +45,7 @@ const drawAndReturnCount = (arrOfStr) => {
         for (let c = 0; c < N; c++) {
             let cell = grid[r][c]
             if (cell == '.' || cell == '#') continue
+
             // is digit/letter
             // mark prev
             antennaCoords[cell] && antennaCoords[cell].forEach(([r2, c2]) => {
@@ -42,41 +53,19 @@ const drawAndReturnCount = (arrOfStr) => {
                 let dc = c - c2
 
                 // add antinode at currLoc
-                for (let i = 0; i < Infinity; i++) {
-                    let anti1_r = r + dr * i
-                    let anti1_c = c + dc * i
-                    if (isValidCoords(anti1_r, anti1_c)) {
-                        uniqueLocAntenna.add(coordsToStr(anti1_r, anti1_c))
-                        if (canDraw(anti1_r, anti1_c))
-                            grid[anti1_r][anti1_c] = '#'
-                    } else {
-                        break
-                    }
-                }
+                addAntiNode(r, c, +dr, +dc)
 
                 // add antinode at prevLoc
-                for (let i = 0; i < Infinity; i++) {
-                    let anti2_r = r2 - dr * i
-                    let anti2_c = c2 - dc * i
-                    if (isValidCoords(anti2_r, anti2_c)) {
-                        uniqueLocAntenna.add(coordsToStr(anti2_r, anti2_c))
-                        if (canDraw(anti2_r, anti2_c))
-                            grid[anti2_r][anti2_c] = '#'
-                    } else {
-                        break
-                    }
-                }
+                addAntiNode(r2, c2, -dr, -dc)
             })
 
-
-            // add curr coords to hashmap
+            // add curr coords to hashmap as "processed previous"
             if (!antennaCoords[cell]) antennaCoords[cell] = []
             antennaCoords[cell].push([r, c])
         }
     }
 
-    grid = grid.map(arr => arr.join(''))
-    console.log(grid)
+    // printGrid()
 
     return uniqueLocAntenna.size
 }
@@ -87,11 +76,10 @@ const main = async () => {
     rawFile = rawFile
         .replaceAll("\r", "")
         .split("\n")
+    // console.log(rawFile)
 
-    console.log(rawFile)
     let res = drawAndReturnCount(rawFile)
     console.log(res)
-
     return res
 }
 
