@@ -81,6 +81,8 @@ const main = async () => {
     let res = drawAndReturnCount(rawFile)
     console.log(res)
     return res
+    // expected sample.txt = 34
+    // expected input.txt = 1115
 }
 
 
