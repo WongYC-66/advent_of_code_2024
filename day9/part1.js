@@ -1,4 +1,4 @@
-// https://adventofcode.com/2024/day/8
+// https://adventofcode.com/2024/day/9
 const { readFile } = require("../lib.js")
 
 const buildFragment = str => {
