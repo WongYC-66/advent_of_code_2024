@@ -41,8 +41,8 @@ const sum = arr => {
 }
 
 const main = async () => {
-    let rawFile = await readFile("sample.txt")
-    // let rawFile = await readFile("input.txt")
+    // let rawFile = await readFile("sample.txt")
+    let rawFile = await readFile("input.txt")
     rawFile = rawFile
         .replaceAll("\r", "")
         .split("\n")
