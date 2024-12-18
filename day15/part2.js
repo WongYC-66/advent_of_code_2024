@@ -1,4 +1,4 @@
-// https://adventofcode.com/2024/day/13
+// https://adventofcode.com/2024/day/15
 const { readFile } = require("../lib.js")
 
 const dirs = {
@@ -159,15 +159,15 @@ const main = async () => {
     rawFile = rawFile
         .replaceAll("\r", "")
         .split("\n")
-    console.log(rawFile)
+    // console.log(rawFile)
 
     let [grid, moves] = extractData(rawFile)
-    printGrid(grid)
+    // printGrid(grid)
     grid = expand(grid)
-    printGrid(grid)
+    // printGrid(grid)
 
-    console.log(moves)
-    console.log(moves.length)
+    // console.log(moves)
+    // console.log(moves.length)
 
     let [r, c] = findRobot(grid)
 
@@ -177,7 +177,7 @@ const main = async () => {
         c = robotC
     })
 
-    printGrid(grid)
+    // printGrid(grid)
 
     let res = countGPS(grid)
     console.log(res)

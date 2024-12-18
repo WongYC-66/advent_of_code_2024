@@ -1,4 +1,4 @@
-// https://adventofcode.com/2024/day/13
+// https://adventofcode.com/2024/day/15
 const { readFile } = require("../lib.js")
 
 const dirs = {
